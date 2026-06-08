@@ -12,10 +12,9 @@ steps {
 sshagent(['ec2-ssh']) {
 sh '''
 ssh -o StrictHostKeyChecking=no ec2-user@51.20.71.231 "
-cd $HOME/Learn-CICD &&
+cd /home/ec2-user/Learn-CICD &&
 git pull origin main &&
 docker rm -f flask-demo || true &&
-docker rmi flask-demo || true &&
 docker build -t flask-demo . &&
 docker run -d --name flask-demo -p 80:5000 flask-demo
 "
