@@ -5,8 +5,8 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return """
-    <h1>DevOps Demo Application</h1>
-    <p>Successfully deployed using:</p>
+    <h1>DevOps Build Successful</h1>
+    <p>Build ID:1</p>
     <ul>
         <li>GitHub</li>
         <li>Jenkins</li>
