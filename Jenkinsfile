@@ -1,16 +1,12 @@
 pipeline {
 agent any
-
-```
 stages {
-
     stage('Checkout') {
         steps {
             git branch: 'main',
                 url: 'https://github.com/palcha/Learn-CICD.git'
         }
     }
-
     stage('Deploy to EC2') {
         steps {
             sshagent(['ec2-ssh']) {
@@ -51,7 +47,6 @@ stages {
         }
     }
 }
-
 post {
     success {
         echo 'Deployment Successful'
@@ -61,6 +56,4 @@ post {
         echo 'Deployment Failed'
     }
 }
-```
-
 }
