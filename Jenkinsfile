@@ -49,9 +49,8 @@ pipeline {
             }
         }
     }
-}
 
-post {
+    post {
     success {
         echo 'Deployment Successful'
     }
@@ -60,4 +59,7 @@ post {
         echo 'Deployment Failed'
     }
 }
+}
+
+
 
