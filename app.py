@@ -6,7 +6,7 @@ app = Flask(__name__)
 def home():
     return """
     <h1>DevOps Build Successful Pallab</h1>
-    <p>Build ID:$BUILD_ID</p>
+    <p>Build ID:${BUILD_NUMBER}</p>
     <ul>
         <li>GitHub</li>
         <li>Jenkins</li>
