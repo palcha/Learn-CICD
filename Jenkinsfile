@@ -49,6 +49,5 @@ post {
         echo 'Deployment Failed'
     }
 }
-```
 
 }
