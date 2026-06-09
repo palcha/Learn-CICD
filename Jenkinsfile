@@ -12,7 +12,7 @@ steps {
 sshagent(['ec2-ssh']) {
 sh '''
 ssh -o StrictHostKeyChecking=no ec2-user@13.51.194.130 "
-cd /home/ec2-user/Learn-CICD &&
+cd /home/ec2-user &&
 git pull origin main &&
 docker rm -f flask-demo || true &&
 docker build -t flask-demo . &&
