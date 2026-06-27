@@ -5,7 +5,7 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return """
-    <h1>DevOps Build Successful Pallab now in Accenture and this is my weekend</h1>
+    <h1>DevOps Build Successful for AWS Project</h1>
     <p>Build ID:{build_number}</p>
     <ul>
         <li>GitHub</li>

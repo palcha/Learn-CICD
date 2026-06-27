@@ -1,15 +1,16 @@
 pipeline {
-
-
 agent any
 
-environment {
-    REPO_URL    = 'https://github.com/palcha/Learn-CICD.git'
-    BRANCH_NAME = 'main'
 
-    APP_NAME    = 'flask-demo'
-    IMAGE_NAME  = 'chakrabortypallab42/flask-demo'
-    IMAGE_TAG   = "${BUILD_NUMBER}"
+environment {
+    REPO_URL      = 'https://github.com/palcha/Learn-CICD.git'
+    BRANCH_NAME   = 'main'
+
+    IMAGE_NAME    = 'chakrabortypallab42/flask-demo'
+    IMAGE_TAG     = "${BUILD_NUMBER}"
+
+    AWS_REGION    = 'eu-north-1'
+    ASG_NAME      = 'tf-demo-asg'
 }
 
 stages {
@@ -23,34 +24,25 @@ stages {
 
     stage('Lint Test') {
         steps {
-            sh '''
-            python3 -m pip install flake8 || true
-            flake8 app.py || true
-            '''
+            echo 'Lint stage placeholder'
         }
     }
 
     stage('Unit Test') {
         steps {
-            sh '''
-            echo "Unit tests placeholder"
-            '''
+            echo 'Unit test stage placeholder'
         }
     }
 
     stage('Security Scan') {
         steps {
-            sh '''
-            echo "Security scan placeholder"
-            '''
+            echo 'Security scan stage placeholder'
         }
     }
 
     stage('Performance Test') {
         steps {
-            sh '''
-            echo "Performance test placeholder"
-            '''
+            echo 'Performance test stage placeholder'
         }
     }
 
@@ -74,7 +66,6 @@ stages {
                     passwordVariable: 'DOCKER_PASS'
                 )
             ]) {
-
                 sh '''
                 echo $DOCKER_PASS | docker login \
                   -u $DOCKER_USER \
@@ -92,17 +83,26 @@ stages {
             '''
         }
     }
+
+    stage('Refresh Auto Scaling Group') {
+        steps {
+            sh '''
+            export AWS_DEFAULT_REGION=${AWS_REGION}
+
+            aws autoscaling start-instance-refresh \
+              --auto-scaling-group-name ${ASG_NAME}
+            '''
+        }
+    }
 }
 
 post {
-
     success {
-        echo "Docker image pushed successfully."
-        echo "New ASG instances will automatically pull the latest image."
+        echo 'Pipeline Successful'
     }
 
     failure {
-        echo "Pipeline Failed"
+        echo 'Pipeline Failed'
     }
 
     always {
