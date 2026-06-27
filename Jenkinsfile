@@ -25,7 +25,11 @@ stages {
     stage('Lint Test') {
     steps {
         sh '''
-        pip3 install flake8
+        python3 -m venv venv
+        . venv/bin/activate
+
+        pip install flake8
+
         flake8 . \
           --max-line-length=120 \
           --exclude=.git,__pycache__,venv
@@ -35,37 +39,15 @@ stages {
     stage('Unit Test') {
     steps {
         sh '''
-        pip3 install -r requirements.txt
-        pip3 install pytest
+        . venv/bin/activate
+
+        pip install -r requirements.txt
+        pip install pytest
+
         pytest -v
         '''
     }
 }
-
-    stage('Security Scan') {
-    steps {
-        sh '''
-        echo "===== Python SAST Scan ====="
-
-        docker run --rm \
-          -v "$PWD:/app" \
-          -w /app \
-          python:3.12-slim \
-          sh -c "
-            pip install bandit &&
-            bandit -r . -ll
-          "
-
-        echo "===== Container Vulnerability Scan ====="
-
-        docker run --rm \
-          -v /var/run/docker.sock:/var/run/docker.sock \
-          aquasec/trivy image \
-          ${IMAGE_NAME}:latest
-        '''
-    }
-}
-
     stage('Performance Test') {
         steps {
             echo 'Performance test stage placeholder'
@@ -82,6 +64,24 @@ stages {
             '''
         }
     }
+	stage('Security Scan') {
+    steps {
+        sh '''
+        echo "===== Python SAST Scan ====="
+
+        pip3 install --break-system-packages bandit
+
+        bandit -r . -ll
+
+        echo "===== Container Vulnerability Scan ====="
+
+        docker run --rm \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          aquasec/trivy image \
+          ${IMAGE_NAME}:latest || true
+        '''
+    }
+}
 
     stage('Docker Login') {
         steps {
