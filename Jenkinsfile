@@ -65,18 +65,6 @@ stages {
             '''
         }
     }
-	#stage('Security Scan') {
-    #steps {
-     #   sh '''
-      #  . venv/bin/activate
-
-       # pip install bandit
-
-        #bandit app.py test_app.py -ll
-        #'''
-   # }
-#}
-
     stage('Docker Login') {
         steps {
             withCredentials([
