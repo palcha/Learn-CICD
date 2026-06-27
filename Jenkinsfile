@@ -38,6 +38,23 @@ stages {
         '''
     }
 }
+	stage('Debug Docker Mount') {
+    steps {
+        sh '''
+        docker run --rm \
+          -v "$PWD":/app \
+          -w /app \
+          python:3.12-slim \
+          sh -c "
+            echo 'PWD:'
+            pwd
+
+            echo 'Files:'
+            ls -la
+          "
+        '''
+    }
+}
 
     stage('Unit Test') {
     steps {
