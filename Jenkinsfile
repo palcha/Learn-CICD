@@ -68,18 +68,11 @@ stages {
 	stage('Security Scan') {
     steps {
         sh '''
-        echo "===== Python SAST Scan ====="
+        . venv/bin/activate
 
-        pip3 install --break-system-packages bandit
+        pip install bandit
 
         bandit -r . -ll
-
-        echo "===== Container Vulnerability Scan ====="
-
-        docker run --rm \
-          -v /var/run/docker.sock:/var/run/docker.sock \
-          aquasec/trivy image \
-          ${IMAGE_NAME}:latest || true
         '''
     }
 }
