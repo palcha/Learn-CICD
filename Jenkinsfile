@@ -85,15 +85,28 @@ stages {
     }
 
     stage('Refresh Auto Scaling Group') {
-        steps {
-            sh '''
-            export AWS_DEFAULT_REGION=${AWS_REGION}
+steps {
+withCredentials([
+usernamePassword(
+credentialsId: 'aws-creds',
+usernameVariable: 'AWS_ACCESS_KEY_ID',
+passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+)
+]) {
 
-            aws autoscaling start-instance-refresh \
-              --auto-scaling-group-name ${ASG_NAME}
-            '''
-        }
+
+        sh '''
+        export AWS_DEFAULT_REGION=${AWS_REGION}
+
+        aws autoscaling start-instance-refresh \
+          --auto-scaling-group-name ${ASG_NAME}
+        '''
     }
+}
+
+
+}
+
 }
 
 post {
