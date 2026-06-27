@@ -40,16 +40,44 @@ stages {
 }
 
     stage('Unit Test') {
-        steps {
-            echo 'Unit test stage placeholder'
-        }
+    steps {
+        sh '''
+        docker run --rm \
+          -v "$PWD:/app" \
+          -w /app \
+          python:3.12-slim \
+          sh -c "
+            pip install -r requirements.txt &&
+            pip install pytest &&
+            pytest -v
+          "
+        '''
     }
+}
 
     stage('Security Scan') {
-        steps {
-            echo 'Security scan stage placeholder'
-        }
+    steps {
+        sh '''
+        echo "===== Python SAST Scan ====="
+
+        docker run --rm \
+          -v "$PWD:/app" \
+          -w /app \
+          python:3.12-slim \
+          sh -c "
+            pip install bandit &&
+            bandit -r . -ll
+          "
+
+        echo "===== Container Vulnerability Scan ====="
+
+        docker run --rm \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          aquasec/trivy image \
+          ${IMAGE_NAME}:latest
+        '''
     }
+}
 
     stage('Performance Test') {
         steps {
