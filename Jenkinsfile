@@ -23,10 +23,19 @@ stages {
     }
 
     stage('Lint Test') {
-        steps {
-            echo 'Lint stage placeholder'
-        }
+    steps {
+        sh '''
+        python3 --version
+
+        pip3 install --upgrade pip
+        pip3 install flake8
+
+        flake8 . \
+          --max-line-length=120 \
+          --exclude=.git,__pycache__,venv
+        '''
     }
+}
 
     stage('Unit Test') {
         steps {
