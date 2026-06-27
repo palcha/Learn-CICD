@@ -25,49 +25,19 @@ stages {
     stage('Lint Test') {
     steps {
         sh '''
-        docker run --rm \
-          -v "$PWD:/app" \
-          -w /app \
-          python:3.12-slim \
-          sh -c "
-            pip install flake8 &&
-            flake8 . \
-              --max-line-length=120 \
-              --exclude=.git,__pycache__,venv
-          "
+        pip3 install flake8
+        flake8 . \
+          --max-line-length=120 \
+          --exclude=.git,__pycache__,venv
         '''
     }
 }
-	stage('Debug Docker Mount') {
-    steps {
-        sh '''
-        docker run --rm \
-          -v "$PWD":/app \
-          -w /app \
-          python:3.12-slim \
-          sh -c "
-            echo 'PWD:'
-            pwd
-
-            echo 'Files:'
-            ls -la
-          "
-        '''
-    }
-}
-
     stage('Unit Test') {
     steps {
         sh '''
-        docker run --rm \
-          -v "$PWD:/app" \
-          -w /app \
-          python:3.12-slim \
-          sh -c "
-            pip install -r requirements.txt &&
-            pip install pytest &&
-            pytest -v
-          "
+        pip3 install -r requirements.txt
+        pip3 install pytest
+        pytest -v
         '''
     }
 }
