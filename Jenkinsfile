@@ -8,7 +8,7 @@ environment {
     BRANCH_NAME = 'main'
 
     APP_NAME    = 'flask-demo'
-    IMAGE_NAME  = 'chakrabortypallab42@gmail.com/flask-demo'
+    IMAGE_NAME  = 'chakrabortypallab42/flask-demo'
     IMAGE_TAG   = "${BUILD_NUMBER}"
 }
 
