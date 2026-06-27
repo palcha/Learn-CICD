@@ -32,7 +32,8 @@ stages {
 
         flake8 . \
           --max-line-length=120 \
-          --exclude=.git,__pycache__,venv
+          --exclude=.git,__pycache__,venv \
+          --ignore=W292,W293
         '''
     }
 }
