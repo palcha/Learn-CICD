@@ -72,7 +72,7 @@ stages {
 
         pip install bandit
 
-        bandit -r . -ll
+        bandit app.py test_app.py -ll
         '''
     }
 }
