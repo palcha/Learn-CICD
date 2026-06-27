@@ -25,14 +25,16 @@ stages {
     stage('Lint Test') {
     steps {
         sh '''
-        python3 --version
-
-        pip3 install --upgrade pip
-        pip3 install flake8
-
-        flake8 . \
-          --max-line-length=120 \
-          --exclude=.git,__pycache__,venv
+        docker run --rm \
+          -v "$PWD:/app" \
+          -w /app \
+          python:3.12-slim \
+          sh -c "
+            pip install flake8 &&
+            flake8 . \
+              --max-line-length=120 \
+              --exclude=.git,__pycache__,venv
+          "
         '''
     }
 }
